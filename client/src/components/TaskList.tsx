@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { TaskItem } from "./TaskItem";
 import { TaskForm } from "./TaskForm";
 import { useSelector } from "react-redux";
@@ -13,8 +13,7 @@ import {
 } from "../redux/task.slice";
 import { useAppDispatch } from "../redux/store";
 
-export const TaskList: React.FC = () => {
-  //   const [tasks, setTasks] = useState<Task[]>([]);
+export const TaskList = () => {
   const [editingTask, setEditingTask] = useState<Task>();
   const { tasks, status, error } = useSelector(selectTasks);
   const dispatch = useAppDispatch();
@@ -22,9 +21,6 @@ export const TaskList: React.FC = () => {
     dispatch(getTasks());
   }, [dispatch]);
 
-  const handleDeleteTask = (id: string) => {
-    dispatch(deleteTask(id));
-  };
   const handleSave = (task: Task) => {
     if (editingTask) {
       dispatch(updateTask(task));
@@ -33,6 +29,20 @@ export const TaskList: React.FC = () => {
       dispatch(addTask(task));
     }
   };
+
+  const handleDeleteTask = useCallback(
+    (id: string) => {
+      dispatch(deleteTask(id));
+    },
+    [dispatch]
+  );
+
+  const handleEdit = useCallback(
+    (task: Task) => {
+      setEditingTask(task);
+    },
+    [setEditingTask]
+  );
 
   return (
     <div>
@@ -55,7 +65,7 @@ export const TaskList: React.FC = () => {
           <TaskItem
             key={task.id}
             task={task}
-            onEdit={setEditingTask}
+            onEdit={handleEdit}
             onDelete={handleDeleteTask}
           />
         ))}
