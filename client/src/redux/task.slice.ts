@@ -37,13 +37,10 @@ const initialState: InitialState = {
 const handlePending = (state: InitialState) => {
   state.status = StatusRequestEnum.LOADING;
 };
-type SliceActions<T> = {
-  [K in keyof T]: T[K] extends (...args: any[]) => infer A ? A : never;
-}[keyof T];
-
-type ActionTypes = SliceActions<typeof taskSlice.actions>;
-
-const handleRejected = (state: InitialState, action: ActionTypes) => {
+const handleRejected = (
+  state: InitialState,
+  action: PayloadAction<unknown, string, unknown, SerializedError>
+) => {
   state.error = action.error.message ?? "ошибка";
   state.status = StatusRequestEnum.ERROR;
 };
