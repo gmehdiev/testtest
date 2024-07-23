@@ -1,4 +1,4 @@
-import React from "react";
+import { memo } from "react";
 import { Task } from "../redux/task.slice";
 
 interface TaskItemProps {
@@ -7,11 +7,7 @@ interface TaskItemProps {
   onDelete: (id: string) => void;
 }
 
-export const TaskItem: React.FC<TaskItemProps> = ({
-  task,
-  onEdit,
-  onDelete,
-}) => {
+export const TaskItem = memo(({ task, onEdit, onDelete }: TaskItemProps) => {
   return (
     <div className="border p-4 mb-2 flex justify-between items-center">
       <div>
@@ -29,4 +25,4 @@ export const TaskItem: React.FC<TaskItemProps> = ({
       </div>
     </div>
   );
-};
+});
